@@ -20,6 +20,14 @@ RUN apk add py-httplib2 py-netifaces --update-cache --repository http://dl-3.alp
 
 RUN apk add --update py-lxml py-jinja2
 
+# Numpy Stuff
+RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
+
+#from the testing alpine repo
+RUN apk add --update py-numpy --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN apk add --update py-scipy --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+
+
 RUN pip install -U pip
 
 WORKDIR /app
