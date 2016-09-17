@@ -22,9 +22,11 @@ RUN apk add --update py-libxslt
 RUN apk add py-httplib2 py-netifaces --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
 
 RUN apk add --update py-lxml py-jinja2
+RUN apk add --update musl libffi py-cffi py-cryptography
+
 
 # Numpy Stuff
-RUN apk add --update libgfortran libstdc++ libgcc gfortran cython musl
+RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
 
 #from the testing alpine repo
 RUN apk add --update py-numpy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
