@@ -1,5 +1,8 @@
 FROM iron/python:2-dev
 
+RUN apk update
+
+
 RUN apk add --update make cmake gcc g++
 RUN apk add --update python-dev
 RUN apk add --update musl
@@ -21,12 +24,11 @@ RUN apk add py-httplib2 py-netifaces --update-cache --repository http://dl-3.alp
 RUN apk add --update py-lxml py-jinja2
 
 # Numpy Stuff
-RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
+RUN apk add --update libgfortran libstdc++ libgcc gfortran cython musl
 
 #from the testing alpine repo
-RUN apk add --update py-numpy --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
-RUN apk add --update py-scipy --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
-
+RUN apk add --update py-numpy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+#RUN apk add --update py-scipy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 RUN pip install -U pip
 
