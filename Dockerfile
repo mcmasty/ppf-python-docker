@@ -1,10 +1,14 @@
-FROM iron/python:2-dev
+#FROM iron/python:2-dev
+FROM alpine:3.4
 
-RUN apk update
+RUN apk update && apk upgrade \
+  && apk add ca-certificates \
+  && rm -rf /var/cache/apk/*
 
+#RUN apk update && apk upgrade
 
-RUN apk add --update make cmake gcc g++
-RUN apk add --update python-dev
+RUN apk add --update make cmake gcc g++ git
+RUN apk add --update python-dev py-pip
 RUN apk add --update musl
 RUN apk add --update zlib
 
@@ -18,19 +22,19 @@ RUN apk add --update libxslt-dev
 
 RUN apk add --update py-setuptools
 RUN apk add --update py-libxml2
-RUN apk add --update py-libxslt
-RUN apk add py-httplib2 py-netifaces --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN apk add --update py-libxslt py-httplib2
 
 RUN apk add --update py-lxml py-jinja2
 RUN apk add --update musl libffi py-cffi py-cryptography
 
-
 # Numpy Stuff
-RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
+RUN apk add --update libgfortran libstdc++ libgcc gfortran cython cython-dev
 
-#from the testing alpine repo
-RUN apk add --update py-numpy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
-#RUN apk add --update py-scipy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+#from the Community alpine repo
+RUN apk add --update py-numpy openblas --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+
+RUN apk add py-netifaces py-scipy --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+
 
 RUN pip install -U pip
 
