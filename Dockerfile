@@ -36,8 +36,8 @@ RUN pip install -U pip
 
 WORKDIR /app
 ONBUILD ADD . /app
-ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/ReportClient.py com/adventnet/zoho/client/report/python/
-
+#ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/ReportClient.py com/adventnet/zoho/client/report/python/
+ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/Zoho_ReportClient_20170801.py com/adventnet/zoho/client/report/python/
 
 RUN echo '#$Id$' > com/"__init__.py"
 RUN echo '#$Id$' > com/adventnet/"__init__.py"
