@@ -1,5 +1,6 @@
+FROM python:2.7-alpine
 #FROM iron/python:2-dev
-FROM alpine:3.4
+#FROM alpine:3.6
 
 RUN apk update && apk upgrade \
   && apk add ca-certificates \
@@ -8,8 +9,8 @@ RUN apk update && apk upgrade \
 #RUN apk update && apk upgrade
 
 RUN apk add --update make cmake gcc g++ git
-RUN apk add --update python-dev py-pip
-RUN apk add --update musl
+#RUN apk add --update python2-dev python2 py-pip
+RUN apk add --update musl musl-dev
 RUN apk add --update zlib
 
 
@@ -28,13 +29,20 @@ RUN apk add --update py-lxml py-jinja2
 RUN apk add --update musl libffi py-cffi py-cryptography
 
 # Numpy Stuff
-RUN apk add --update libgfortran libstdc++ libgcc gfortran cython cython-dev
+RUN apk add --update gfortran libgfortran libstdc++ libgcc  cython cython-dev
 
 #from the Community alpine repo
-RUN apk add --update py-numpy openblas --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk add --update py-numpy openblas  py2-netifaces  py-numpy-f2py --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-RUN apk add py-netifaces py-scipy --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --update py-scipy --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
+# this command work...need to stream line the other crap...remove dupes and stuff
+RUN apk add --no-cache --virtual=build_dependencies g++ && \
+    ln -s /usr/include/locale.h /usr/include/xlocale.h && \
+    pip install pandas==0.19.2  && \
+    apk del build_dependencies  && \
+    apk add --no-cache libstdc++  && \
+    rm -rf /var/cache/apk/*
 
 RUN pip install -U pip
 
