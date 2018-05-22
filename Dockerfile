@@ -3,6 +3,7 @@
 FROM jfloff/alpine-python:2.7
 
 RUN apk update
+RUN apk add --upgrade apk-tools
 
 #RUN apk add --update python2 python2-dev python python-dev
 #RUN apk add --update python-dev
@@ -33,10 +34,10 @@ RUN apk add --update musl libffi py-cffi py-cryptography
 RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
 
 #from the testing alpine repo
-RUN apk add --update py-numpy py-numpy-f2py --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
-RUN apk add --update py-scipy --repository http://nl.alpinelinux.org/alpine/edge/testing
+RUN apk add --update py-numpy py-numpy-f2py py-scipy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 RUN pip install -U pip
+RUN pip install pandas
 
 WORKDIR /app
 ONBUILD ADD . /app
