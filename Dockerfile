@@ -1,16 +1,14 @@
-#FROM python:2-alpine3.4
-#FROM iron/python:2-dev
-FROM jfloff/alpine-python:2.7
+FROM python:2.7-alpine3.8
 
-RUN apk update
-RUN apk add --upgrade apk-tools
+RUN apk update && apk upgrade \
+  && apk add ca-certificates \
+  && rm -rf /var/cache/apk/*
 
-#RUN apk add --update python2 python2-dev python python-dev
-#RUN apk add --update python-dev
+#RUN apk update && apk upgrade
+RUN apk add --update make cmake gcc g++ git linux-headers
 
-
-RUN apk add --update make cmake gcc g++
-RUN apk add --update musl
+#RUN apk add --update python2-dev python2 py-pip
+RUN apk add --update musl musl-dev
 RUN apk add --update zlib
 
 
@@ -23,26 +21,33 @@ RUN apk add --update libxslt-dev
 
 RUN apk add --update py-setuptools
 RUN apk add --update py-libxml2
-RUN apk add --update py-libxslt
-RUN apk add py-httplib2 py-netifaces py2-netifaces --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk add --update py-libxslt py-httplib2
 
 RUN apk add --update py-lxml py-jinja2
-RUN apk add --update musl libffi py-cffi py-cryptography
-
+RUN apk add --update musl libffi libffi-dev libressl-dev py-cffi py-cryptography
 
 # Numpy Stuff
-RUN apk add --update libgfortran libstdc++ libgcc gfortran cython
+RUN apk add --update gfortran libgfortran libstdc++ libgcc  cython cython-dev
 
-#from the testing alpine repo
-RUN apk add --update py-numpy py-numpy-f2py py-scipy --repository http://dl-cdn.alpinelinux.org/alpine/edge/community
+#from the Community alpine repo
+RUN apk add --update py-numpy py-numpy-dev  py-scipy  py-netifaces  py-numpy-f2py --repository http://dl-cdn.alpinelinux.org/alpine/v3.8/community
 
+# this command work...need to stream line the other crap...remove dupes and stuff
+RUN apk add --no-cache --virtual=build_dependencies g++ && \
+    ln -s /usr/include/locale.h /usr/include/xlocale.h && \
+    pip install pandas==0.23.4  && \
+    apk del build_dependencies  && \
+    apk add --no-cache libstdc++  && \
+    rm -rf /var/cache/apk/*
+
+RUN apk add --update py-cryptography
 RUN pip install -U pip
 RUN pip install pandas
 
 WORKDIR /app
 ONBUILD ADD . /app
-#ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/ReportClient.py com/adventnet/zoho/client/report/python/
-ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/Zoho_ReportClient_20170801.py com/adventnet/zoho/client/report/python/ReportClient.py
+ADD http://cbd6a0bc973476113c8f-398472c2d78fec93ea34cdff5c856daa.r58.cf2.rackcdn.com/zoho_py_client/v7_m2/ReportClient.py com/adventnet/zoho/client/report/python/
+
 
 RUN echo '#$Id$' > com/"__init__.py"
 RUN echo '#$Id$' > com/adventnet/"__init__.py"
